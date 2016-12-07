@@ -34,7 +34,7 @@ if len(punfile) < 1 : punfile = 'sample.pun'
 try :
     pun = open(punfile,'r')
 except:
-    print 'Punchfile ',punchfile,'not found!'
+    print 'Punchfile ',punfile,'not found!'
     exit()
 
 #General variables
