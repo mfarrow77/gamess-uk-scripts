@@ -13,12 +13,12 @@ def convert_h_to_ev(val):
 
 def write_outxyz(outnum,title,num_atoms,data,energy):
 #Strip off the extension and create output file
+    energy = convert_h_to_ev(energy)
     outfile = punfile.split(".")[0] + '_'+ outnum + '.xyz'
     out = open(outfile,'w')
     print 'Writing data to',outfile
     out.write(str(num_atoms)+'\n')
     writestr = title.rstrip() + ' SCF energy: '+ str(energy) + '\n'
-    print writestr
     out.write(writestr)
     for i in range(int(num_atoms)):
         writestr = atomlist[i]+ ' ' 
@@ -37,8 +37,9 @@ except:
     exit()
 
 #General variables
-debug = False   #Set to true to get lots of output!
-energy = 0.000
+title = 'pun2xyz_title\n'  #Placeholder for title in case it is not in punchfile
+debug = False  #Set to true to get lots of output!
+energy = 0.00  # Store the scf energy
 outnum = '000'  #Filename number for output file
 newline='' 
 line_num = 0    # A counter for the number of lines
@@ -67,10 +68,13 @@ for line in pun:
                if debug: print 'The title is',title
                break 
         elif word == 'scf_energy':
+            energy = 0.00
             for scf_energy in pun:
                 line_num = line_num + 1
                 energy = energy + float(scf_energy)
                 if debug: print "The energy is",energy
+                write_outxyz(outnum,title,num_atoms,data,energy)
+                outnum = "{0:03d}".format(int(outnum) + 1)
                 break
         elif word == 'coordinates':
             data=list()
@@ -88,8 +92,6 @@ for line in pun:
                     print data
                 count = count + 1
                 if count > num_atoms: 
-                    write_outxyz(outnum,title,num_atoms,data,energy)
-                    outnum = "{0:03d}".format(int(outnum) + 1)
                     break
 pun.close()
 print 'Program complete.\n\n',line_num,'lines read\n\nPlease check output files\n\n\n'
