@@ -38,6 +38,7 @@ except:
     exit()
 
 #General variables
+title = 'pun2grd_data\n' #Title placeholder in case punchfile doesn't have one
 debug = False  #Set to true to get lots of output!
 outnum = '000' #Filename number for output file
 newline=''     #A blank string to hold the continuation line
